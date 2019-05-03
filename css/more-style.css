@@ -1,0 +1,19 @@
+.skin-pop-up {
+  position: fixed;
+  left: 15vw;
+  top: 10vh;
+  width: 70vw;
+  background-color: white;
+  min-height: 20px;
+  animation-fill-mode: forwards;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24);
+}
+
+.skin-pop-up__champion-images {
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid #FFD700;
+}
