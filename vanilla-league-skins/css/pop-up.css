@@ -1,0 +1,29 @@
+.skin-pop-up {
+  position: fixed;
+  left: 15vw;
+  top: 10vh;
+  width: 70vw;
+  background-color: #fff;
+  min-height: 20px;
+  animation-fill-mode: forwards;
+  box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24);
+}
+.skin-pop-up__image-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.skin-pop-up__image-wrapper .loader {
+  position: absolute;
+  top: -9px;
+  left: -9px;
+  width: 102px;
+}
+.skin-pop-up__champion-image {
+  border: 3px solid #1469cc;
+  border-radius: 50%;
+  box-sizing: border-box;
+  width: 84px;
+  height: 84px;
+}
