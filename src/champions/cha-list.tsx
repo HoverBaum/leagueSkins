@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core'
+import { jsx, css } from '@emotion/core'
 
 import SmallCha from './small-cha'
 import { Champion } from './champion'
@@ -11,8 +11,9 @@ const ChaList = () => {
 
   useEffect(() => {
     const fetchChas = async () => {
-      const chas = await fetch('/testData/skins.json')
-        .then(response => response.json())
+      const chas = await fetch('/testData/skins.json').then(response =>
+        response.json()
+      )
       console.log('chas', chas)
       setChas(chas)
     }
@@ -20,8 +21,16 @@ const ChaList = () => {
   }, [])
 
   return (
-    <ul>
-      {chas.map(cha => <SmallCha key={cha.id} />)}
+    <ul
+      css={css`
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      `}
+    >
+      {chas.map(cha => (
+        <SmallCha key={cha.id} name={cha.name} imageURL={cha.squareImageUrl} />
+      ))}
     </ul>
   )
 }
