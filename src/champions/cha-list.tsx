@@ -6,19 +6,27 @@ import { Champion } from './champion'
 import { useEffect, useState } from 'react'
 
 const ChaList = () => {
-  const initialChaState: Champion[] = []
-  const [chas, setChas] = useState(initialChaState)
+  const initialChampionState: Champion[] = []
+  const [champions, setChampions] = useState(initialChampionState)
+  const [selectedChampion, setSelectedChampion] = useState(null)
 
   useEffect(() => {
     const fetchChas = async () => {
-      const chas = await fetch('/testData/skins.json').then(response =>
-        response.json()
+      const skinsUrl = /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$/.test(
+        window.location.hostname
       )
+        ? '/testData/skins.json'
+        : '/skins.json'
+      const chas = await fetch(skinsUrl).then(response => response.json())
       console.log('chas', chas)
-      setChas(chas)
+      setChampions(chas)
     }
     fetchChas()
   }, [])
+
+  const handleClick: React.MouseEventHandler = (): void => {
+    console.log('click')
+  }
 
   return (
     <ul
@@ -28,8 +36,13 @@ const ChaList = () => {
         flex-wrap: wrap;
       `}
     >
-      {chas.map(cha => (
-        <SmallCha key={cha.id} name={cha.name} imageURL={cha.squareImageUrl} />
+      {champions.map(cha => (
+        <SmallCha
+          key={cha.id}
+          name={cha.name}
+          imageURL={cha.squareImageUrl}
+          onClick={handleClick}
+        />
       ))}
     </ul>
   )

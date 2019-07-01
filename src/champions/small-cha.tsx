@@ -1,7 +1,15 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 
-const SmallCha = ({ name, imageURL }: { name: string; imageURL: string }) => (
+const SmallCha = ({
+  name,
+  imageURL,
+  onClick,
+}: {
+  name: string
+  imageURL: string
+  onClick: React.MouseEventHandler
+}) => (
   <div
     css={css`
       width: 100px;
@@ -9,6 +17,7 @@ const SmallCha = ({ name, imageURL }: { name: string; imageURL: string }) => (
       padding: 0.5rem;
       box-sizing: border-box;
     `}
+    onClick={onClick}
   >
     <img
       css={css`
@@ -23,6 +32,7 @@ const SmallCha = ({ name, imageURL }: { name: string; imageURL: string }) => (
         }
       `}
       src={imageURL}
+      alt={`${name}-portrait`}
     />
     <span
       css={css`
