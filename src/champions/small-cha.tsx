@@ -32,7 +32,7 @@ const SmallCha = ({
         }
       `}
       src={imageURL}
-      alt={`${name}-portrait`}
+      alt={`${name} portrait`}
     />
     <span
       css={css`

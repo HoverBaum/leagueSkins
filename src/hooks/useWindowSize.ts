@@ -5,17 +5,18 @@
  * but we got that for free 🤷‍
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const useWindowSize = () => {
   const isClient = typeof window === 'object'
 
-  function getSize() {
-    return {
+  const getSize = useCallback(
+    () => ({
       width: isClient ? window.innerWidth : undefined,
       height: isClient ? window.innerHeight : undefined,
-    }
-  }
+    }),
+    [isClient]
+  )
 
   const [windowSize, setWindowSize] = useState(getSize)
 
@@ -30,7 +31,7 @@ const useWindowSize = () => {
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [getSize, isClient])
 
   return windowSize
 }

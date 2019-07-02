@@ -51,6 +51,7 @@ const SkinModal = ({
             width: 84px;
             height: 84px;
           `}
+          alt="Loading skins"
         />
         <Loader
           styles={css`

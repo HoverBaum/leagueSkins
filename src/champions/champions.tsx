@@ -17,14 +17,26 @@ const Champions = () => {
 
   useEffect(() => {
     const fetchChas = async () => {
-      const skinsUrl = /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$/.test(
+      const skinsUrl = /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
         window.location.hostname
       )
         ? '/testData/skins.json'
         : '/skins.json'
-      const chas = await fetch(skinsUrl).then(response => response.json())
-      console.log('chas', chas)
-      setChampions(chas)
+      const champions = await fetch(skinsUrl).then(response => response.json())
+      await Promise.all(
+        champions.map(
+          (champion: Champion) =>
+            new Promise(resolve => {
+              const image = new Image()
+              image.addEventListener('load', () => {
+                resolve()
+              })
+              image.src = champion.squareImageUrl
+            })
+        )
+      )
+      console.log('chas', champions)
+      setChampions(champions)
     }
     fetchChas()
 
