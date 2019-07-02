@@ -40,6 +40,7 @@ const ChaList = () => {
         <SkinModal
           loadingImageURL={selectedChampion.squareImageUrl}
           skins={selectedChampion.skins}
+          onClose={() => setSelectedChampion(null)}
         />
       )}
       {champions.length > 0 && (
