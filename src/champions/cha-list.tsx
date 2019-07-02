@@ -1,14 +1,16 @@
+import React from 'react'
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 
 import SmallCha from './small-cha'
 import { Champion } from './champion'
 import { useEffect, useState } from 'react'
+import SkinModal from './skin-modal'
 
 const ChaList = () => {
   const initialChampionState: Champion[] = []
   const [champions, setChampions] = useState(initialChampionState)
-  const [selectedChampion, setSelectedChampion] = useState(null)
+  const [selectedChampion, setSelectedChampion] = useState()
 
   useEffect(() => {
     const fetchChas = async () => {
@@ -24,27 +26,31 @@ const ChaList = () => {
     fetchChas()
   }, [])
 
-  const handleClick: React.MouseEventHandler = (): void => {
-    console.log('click')
-  }
-
   return (
-    <ul
-      css={css`
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-      `}
-    >
-      {champions.map(cha => (
-        <SmallCha
-          key={cha.id}
-          name={cha.name}
-          imageURL={cha.squareImageUrl}
-          onClick={handleClick}
+    <React.Fragment>
+      {selectedChampion && (
+        <SkinModal
+          loadingImageURL={selectedChampion.squareImageUrl}
+          skins={selectedChampion.skins}
         />
-      ))}
-    </ul>
+      )}
+      <ul
+        css={css`
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+        `}
+      >
+        {champions.map(cha => (
+          <SmallCha
+            key={cha.id}
+            name={cha.name}
+            imageURL={cha.squareImageUrl}
+            onClick={() => setSelectedChampion(cha)}
+          />
+        ))}
+      </ul>
+    </React.Fragment>
   )
 }
 

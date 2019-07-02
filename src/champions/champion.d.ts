@@ -1,5 +1,8 @@
 export interface Champion {
   id: string
-  squareImageUrl: string
   name: string
+  skins: Skin[]
+  squareImageUrl: string
 }
+
+export interface Skin {}
