@@ -4,6 +4,7 @@ import { Skin } from './champion'
 import Loader from '../loader'
 import useOutsideClick from '../hooks/useOutsideClick'
 import { useRef } from 'react'
+import useWindowSize from '../hooks/useWindowSize'
 
 const SkinModal = ({
   loadingImageURL,
@@ -14,6 +15,7 @@ const SkinModal = ({
   onClose: Function
   skins: Skin[]
 }) => {
+  const { width = 100 } = useWindowSize()
   const ref = useRef(null)
   useOutsideClick(ref, onClose)
 
@@ -24,8 +26,8 @@ const SkinModal = ({
         position: fixed;
         left: 15vw;
         top: 10vh;
-        width: 70vw;
-        height: 60vh;
+        width: ${width * 0.7}px;
+        height: ${(width * 0.7 * 9) / 16}px;
         background-color: #fff;
         min-height: 20px;
         animation-fill-mode: forwards;
