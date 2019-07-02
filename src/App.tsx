@@ -1,21 +1,23 @@
-import React from 'react';
+import React from 'react'
 import { Global, css } from '@emotion/core'
-import ChasList from './champions/cha-list'
+import Champions from './champions/champions'
 
 const App: React.FC = () => {
   return (
     <>
-      <Global styles={css`
-        * {
-          font-family: sans-serif;
-        }
-      `} />
+      <Global
+        styles={css`
+          * {
+            font-family: sans-serif;
+          }
+        `}
+      />
       <header>
         <h1>League Skins</h1>
-        <ChasList />
+        <Champions />
       </header>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
