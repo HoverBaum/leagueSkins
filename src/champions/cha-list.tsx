@@ -6,11 +6,13 @@ import SmallCha from './small-cha'
 import { Champion } from './champion'
 import { useEffect, useState } from 'react'
 import SkinModal from './skin-modal'
+import Loader from '../loader'
 
 const ChaList = () => {
   const initialChampionState: Champion[] = []
   const [champions, setChampions] = useState(initialChampionState)
   const [selectedChampion, setSelectedChampion] = useState()
+  const [shouldDisplaySpinnerYet, setShouldDisplaySpinnerYet] = useState(false)
 
   useEffect(() => {
     const fetchChas = async () => {
@@ -24,6 +26,12 @@ const ChaList = () => {
       setChampions(chas)
     }
     fetchChas()
+
+    // Make sure we only show a loading spinner to the user when loading does
+    // not feel instant to them.
+    setTimeout(() => {
+      setShouldDisplaySpinnerYet(true)
+    }, 100)
   }, [])
 
   return (
@@ -34,22 +42,34 @@ const ChaList = () => {
           skins={selectedChampion.skins}
         />
       )}
-      <ul
-        css={css`
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-        `}
-      >
-        {champions.map(cha => (
-          <SmallCha
-            key={cha.id}
-            name={cha.name}
-            imageURL={cha.squareImageUrl}
-            onClick={() => setSelectedChampion(cha)}
-          />
-        ))}
-      </ul>
+      {champions.length > 0 && (
+        <ul
+          css={css`
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+          `}
+        >
+          {champions.map(cha => (
+            <SmallCha
+              key={cha.id}
+              name={cha.name}
+              imageURL={cha.squareImageUrl}
+              onClick={() => setSelectedChampion(cha)}
+            />
+          ))}
+        </ul>
+      )}
+      {champions.length === 0 && shouldDisplaySpinnerYet && (
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+          `}
+        >
+          <Loader />
+        </div>
+      )}
     </React.Fragment>
   )
 }

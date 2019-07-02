@@ -25,6 +25,8 @@ const dash = keyframes`
 const Loader = ({ styles = css`` }: { styles?: SerializedStyles }) => (
   <div
     css={css`
+      width: 100px;
+      position: relative;
       ${styles}
       &:before {
         content: '';
