@@ -3,7 +3,7 @@ export interface Champion {
   name: string
   skins: Skin[]
   squareImageUrl: string
-  image?: HTMLImageElement
+  image: string
 }
 
 export interface Skin {}

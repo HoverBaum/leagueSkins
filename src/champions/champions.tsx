@@ -23,20 +23,29 @@ const Champions = () => {
         ? '/testData/skins.json'
         : '/skins.json'
       const champions = await fetch(skinsUrl).then(response => response.json())
-      await Promise.all(
+      const championsWithImages: Champion[] = await Promise.all(
         champions.map(
           (champion: Champion) =>
             new Promise(resolve => {
               const image = new Image()
-              image.addEventListener('load', () => {
-                resolve()
-              })
+              // Use function here to get the right context.
+              image.onload = () => {
+                const canvas = document.createElement('canvas')
+                canvas.width = image.naturalWidth
+                canvas.height = image.naturalHeight
+                const context = canvas.getContext('2d')
+                if (context) context.drawImage(image, 0, 0)
+                resolve({
+                  ...champion,
+                  image: canvas.toDataURL('image/png'),
+                })
+              }
               image.src = champion.squareImageUrl
             })
         )
       )
       console.log('chas', champions)
-      setChampions(champions)
+      setChampions(championsWithImages)
     }
     fetchChas()
 
@@ -63,7 +72,7 @@ const Champions = () => {
             <SmallCha
               key={cha.id}
               name={cha.name}
-              imageURL={cha.squareImageUrl}
+              imageURL={cha.image}
               onClick={() => setSelectedChampion(cha)}
             />
           )}
