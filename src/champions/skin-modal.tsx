@@ -18,6 +18,7 @@ const SkinModal = ({
 }) => {
   const initialLoadedSkins: SkinLoaded[] = []
   const [loadedSkins, setLoadedSkins] = useState(initialLoadedSkins)
+  const [shouldDisplayLoaderYet, setShouldDisplayLoaderYet] = useState(false)
   const { width = 100 } = useWindowSize()
   const ref = useRef(null)
   useOutsideClick(ref, onClose)
@@ -49,6 +50,8 @@ const SkinModal = ({
       setLoadedSkins(skinsWithImages)
     }
     loadImages()
+
+    setTimeout(() => setShouldDisplayLoaderYet(true), 100)
   }, [skins])
 
   return (
@@ -66,7 +69,7 @@ const SkinModal = ({
         box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24);
       `}
     >
-      {loadedSkins.length === 0 ? (
+      {loadedSkins.length === 0 && shouldDisplayLoaderYet && (
         <div
           css={css`
             position: absolute;
@@ -95,9 +98,8 @@ const SkinModal = ({
             `}
           />
         </div>
-      ) : (
-        <ChampionSpinner skins={loadedSkins} />
       )}
+      {loadedSkins.length > 0 && <ChampionSpinner skins={loadedSkins} />}
     </div>
   )
 }

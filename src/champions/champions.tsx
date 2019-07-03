@@ -60,7 +60,7 @@ const Champions = () => {
     <React.Fragment>
       {selectedChampion && (
         <SkinModal
-          loadingImageURL={selectedChampion.squareImageUrl}
+          loadingImageURL={selectedChampion.image}
           skins={selectedChampion.skins}
           onClose={() => setSelectedChampion(null)}
         />
