@@ -29,7 +29,6 @@ const Champions = () => {
             new Promise(resolve => {
               const image = new Image()
               image.setAttribute('crossOrigin', 'Anonymous')
-              // Use function here to get the right context.
               image.onload = () => {
                 const canvas = document.createElement('canvas')
                 canvas.width = image.naturalWidth

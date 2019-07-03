@@ -1,9 +1,18 @@
 export interface Champion {
   id: string
   name: string
-  skins: Skin[]
+  skins: Skin[] | SkinLoaded[]
   squareImageUrl: string
   image: string
 }
 
-export interface Skin {}
+export interface Skin {
+  loadingImageUrl: string
+  name: string
+}
+
+export interface SkinLoaded {
+  name: string
+  loadingImage: string
+  splashImage: string
+}
