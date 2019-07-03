@@ -49,7 +49,7 @@ const SkinModal = ({
       setLoadedSkins(skinsWithImages)
     }
     loadImages()
-  }, [])
+  }, [skins])
 
   return (
     <div
