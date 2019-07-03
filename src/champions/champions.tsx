@@ -28,6 +28,7 @@ const Champions = () => {
           (champion: Champion) =>
             new Promise(resolve => {
               const image = new Image()
+              image.setAttribute('crossOrigin', 'Anonymous')
               // Use function here to get the right context.
               image.onload = () => {
                 const canvas = document.createElement('canvas')
@@ -37,7 +38,7 @@ const Champions = () => {
                 if (context) context.drawImage(image, 0, 0)
                 resolve({
                   ...champion,
-                  image: canvas.toDataURL('image/png'),
+                  image: canvas.toDataURL(),
                 })
               }
               image.src = champion.squareImageUrl
