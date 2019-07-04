@@ -26,7 +26,18 @@ const ChampionSpinner = ({ skins }: { skins: SkinLoaded[] }) => {
           background-color: white;
           z-index: 900;
         `}
-      />
+      >
+        <span
+          css={css`
+            position: absolute;
+            top: 40%;
+            left: 52%;
+            font-size: 2em;
+          `}
+        >
+          {skins[currentSkindIndex].name}
+        </span>
+      </div>
     </Fragment>
   )
 }

@@ -78,7 +78,7 @@ const SkinSelector = ({
           text-shadow: 1px 1px 0px #000;
         `}
       >
-        {skins[currentSkinIndex].name}
+        {skins[currentSkinIndex].shortName}
       </span>
     </div>
   )
