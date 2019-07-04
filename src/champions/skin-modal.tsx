@@ -29,20 +29,35 @@ const SkinModal = ({
         skins.map(
           skin =>
             new Promise(resolve => {
-              const image = new Image()
-              image.setAttribute('crossOrigin', 'Anonymous')
-              image.onload = () => {
-                const canvas = document.createElement('canvas')
-                canvas.width = image.naturalWidth
-                canvas.height = image.naturalHeight
-                const context = canvas.getContext('2d')
-                if (context) context.drawImage(image, 0, 0)
-                resolve({
-                  ...skin,
-                  loadingImage: canvas.toDataURL(),
-                })
+              const loadingImage = new Image()
+              loadingImage.setAttribute('crossOrigin', 'Anonymous')
+              loadingImage.onload = () => {
+                const loadingCanvas = document.createElement('canvas')
+                loadingCanvas.width = loadingImage.naturalWidth
+                loadingCanvas.height = loadingImage.naturalHeight
+                const loadingContext = loadingCanvas.getContext('2d')
+                if (loadingContext) loadingContext.drawImage(loadingImage, 0, 0)
+
+                // now also load splash art.
+                const splashImage = new Image()
+                splashImage.setAttribute('crossOrigin', 'Anonymous')
+                splashImage.onload = () => {
+                  const splashCanvas = document.createElement('canvas')
+                  splashCanvas.width = splashImage.naturalWidth
+                  splashCanvas.height = splashImage.naturalHeight
+                  const splashContext = splashCanvas.getContext('2d')
+                  if (splashContext) splashContext.drawImage(splashImage, 0, 0)
+
+                  // We have both images loaded now and can resolve.
+                  resolve({
+                    ...skin,
+                    loadingImage: loadingCanvas.toDataURL(),
+                    splashImage: splashCanvas.toDataURL(),
+                  })
+                }
+                splashImage.src = skin.splashImageUrl
               }
-              image.src = skin.loadingImageUrl
+              loadingImage.src = skin.loadingImageUrl
             })
         )
       )

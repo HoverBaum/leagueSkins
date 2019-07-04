@@ -8,6 +8,7 @@ export interface Champion {
 
 export interface Skin {
   loadingImageUrl: string
+  splashImageUrl: string
   name: string
   shortName: string
 }

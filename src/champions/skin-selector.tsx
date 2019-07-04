@@ -43,6 +43,10 @@ const SkinSelector = ({
         const yRotate = isCurrent
           ? '0deg'
           : `${indexDifference < 0 ? '-' : ''}25deg`
+        const currentBoxShadow =
+          '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)'
+        const boxShadow =
+          '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         return (
           <img
             src={skin.loadingImage}
@@ -60,6 +64,7 @@ const SkinSelector = ({
               transform: translateX(${xTranslate}) rotateY(${yRotate})
                 ${isCurrent ? 'scale(1.1)' : ''};
               z-index: ${1100 - Math.abs(indexDifference)};
+              box-shadow: ${isCurrent ? currentBoxShadow : boxShadow};
             `}
           />
         )
