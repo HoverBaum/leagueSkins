@@ -11,10 +11,12 @@ const TextInput = ({
   onChange,
   value,
   styles,
+  label,
 }: {
   onChange: Function
   value: string
   styles: SerializedStyles
+  label: string
 }) => (
   <div
     css={[
@@ -30,7 +32,7 @@ const TextInput = ({
     ]}
   >
     <TextField
-      label="Filter"
+      label={label}
       onTrailingIconSelect={() => onChange('')}
       trailingIcon={
         <MaterialIcon className="delete-icon" role="button" icon="delete" />

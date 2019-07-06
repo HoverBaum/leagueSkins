@@ -2,7 +2,7 @@ import React from 'react'
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 
-import { Champion } from './champion'
+import { Champion, Skin, SkinLoaded } from './champion'
 import { useEffect, useState } from 'react'
 import SkinModal from './skin-modal'
 import Loader from '../loader'
@@ -16,6 +16,26 @@ const Champions = () => {
   const [selectedChampion, setSelectedChampion] = useState()
   const [shouldDisplaySpinnerYet, setShouldDisplaySpinnerYet] = useState(false)
   const [filter, setFilter] = useState('')
+
+  const filterChampions = (
+    champions: Champion[],
+    filter: string
+  ): Champion[] => {
+    if (filter === '') return champions
+    const filterRegEx = new RegExp(filter.replace(/\s/g, ''), 'i')
+    const filteredChampions = champions.filter(champion => {
+      let shouldBeIncluded = false
+      if (filterRegEx.test(champion.name)) shouldBeIncluded = true
+      // TODO: COMING SOON: also filter and search for skins.
+      // const skins = champion.skins as Skin[]
+      // const foundSkin: Boolean = skins.some(skin =>
+      //   filterRegEx.test(skin.name.replace(/\s/g, ''))
+      // )
+      // if (foundSkin) return true
+      return shouldBeIncluded
+    })
+    return filteredChampions
+  }
 
   useEffect(() => {
     const fetchChas = async () => {
@@ -59,8 +79,6 @@ const Champions = () => {
     }, 100)
   }, [])
 
-  const filterRegEx = new RegExp(filter, 'i')
-
   return (
     <React.Fragment>
       {selectedChampion && (
@@ -80,11 +98,10 @@ const Champions = () => {
             `}
             value={filter}
             onChange={setFilter}
+            label={'Filter champions'}
           />
           <ChaList
-            champions={champions.filter(
-              cha => filter === '' || filterRegEx.test(cha.name)
-            )}
+            champions={filterChampions(champions, filter)}
             renderItem={(cha: Champion) => (
               <SmallCha
                 key={cha.id}
