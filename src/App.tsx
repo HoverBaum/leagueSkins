@@ -36,6 +36,11 @@ const App: React.FC = () => {
               font-weight: 300;
               font-size: 2rem;
             }
+            h3 {
+              font-weight: 300;
+              font-size: 1.5rem;
+              margin-top: 2em;
+            }
             a {
               color: #1469cc;
             }
