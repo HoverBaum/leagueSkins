@@ -19,3 +19,8 @@ export interface SkinLoaded {
   splashImage: string
   shortName: string
 }
+
+export interface Point {
+  x: number,
+  y: number
+}
