@@ -23,13 +23,18 @@ const TextInput = ({
         & .mdc-text-field--focused .mdc-floating-label {
           color: var(--mdc-theme-primary);
         }
+        & .delete-icon:hover {
+          color: var(--theme-alert);
+        }
       `,
     ]}
   >
     <TextField
       label="Filter"
       onTrailingIconSelect={() => onChange('')}
-      trailingIcon={<MaterialIcon role="button" icon="delete" />}
+      trailingIcon={
+        <MaterialIcon className="delete-icon" role="button" icon="delete" />
+      }
       css={css`
         width: 100%;
       `}

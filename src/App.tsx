@@ -21,10 +21,13 @@ const App: React.FC = () => {
               --color-blue: #1469cc;
               --color-yellow: #ffd700;
               --color-really-dark-blue: #02182b;
+              --color-really-light-yellow: #f8ffe5;
+              --color-red: #ff715b;
 
               --theme-primary: var(--color-blue);
               --theme-accent: var(--color-yellow);
               --theme-text: var(--color-really-dark-blue);
+              --theme-alert: var(--color-red);
 
               --mdc-theme-primary: var(--theme-primary);
             }
