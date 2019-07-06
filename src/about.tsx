@@ -22,16 +22,29 @@ const About = () => (
       Legends.
     </p>
 
-    <h3>Links</h3>
+    <section>
+      <h3>Filtering</h3>
 
-    <p>
-      You can find this site on{' '}
-      <a href="https://github.com/HoverBaum/leagueSkins">GitHub</a>.
-    </p>
+      <p>
+        You can use the "Filter champions" input at the top of the champions
+        overview to filter for a champion you are interested in. Just start
+        typing and the list will be filtered accordingly. Remove your input or
+        click the trashcan icon to reset the filter.
+      </p>
+    </section>
 
-    <p>
-      A project by <a href="https://hendrikwallbaum.de/">Hendrik Wallbaum</a>.
-    </p>
+    <section>
+      <h3>Links</h3>
+
+      <p>
+        You can find this site on{' '}
+        <a href="https://github.com/HoverBaum/leagueSkins">GitHub</a>.
+      </p>
+
+      <p>
+        A project by <a href="https://hendrikwallbaum.de/">Hendrik Wallbaum</a>.
+      </p>
+    </section>
   </article>
 )
 

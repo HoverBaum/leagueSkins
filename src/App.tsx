@@ -56,7 +56,7 @@ const App: React.FC = () => {
               margin-top: 2em;
             }
             a {
-              color: var(--color-blue);
+              color: var(--theme-text);
             }
           `}
         />

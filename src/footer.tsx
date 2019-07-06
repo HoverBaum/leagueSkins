@@ -8,6 +8,7 @@ const Footer = () => (
       margin-top: 2rem;
       padding: 2rem;
       padding-bottom: 0.5rem;
+      font-weight: 300;
     `}
   >
     <div
