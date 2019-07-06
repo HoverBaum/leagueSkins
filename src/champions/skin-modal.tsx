@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Skin, SkinLoaded, Point } from './champion'
+import { Skin, Position } from './champion'
 import Loader from '../loader'
 import useOutsideClick from '../hooks/useOutsideClick'
 import { useRef, useEffect, useState, Fragment } from 'react'
@@ -17,7 +17,7 @@ const SkinModal = ({
   loadingImageURL: string
   onClose: Function
   skins: Skin[]
-  originalPosition?: Point
+  originalPosition?: Position
 }) => {
   const loadedSkins = useSkinImages(skins)
   const [waitedLongEnough, setWaitedLongEnough] = useState(false)
@@ -25,9 +25,29 @@ const SkinModal = ({
   const ref = useRef(null)
   useOutsideClick(ref, onClose)
 
+  const modalWith = `${width * 0.7}px`
+  const modalHeight = `${(width * 0.7 * 9) / 16}px`
+
   useEffect(() => {
-    setTimeout(() => setWaitedLongEnough(true), 600)
-  }, [skins])
+    const modalOpeningDuration = 300
+    const modalPosition: Position = {
+      left: '15vw',
+      top: '10vh',
+      width: modalWith,
+      height: modalHeight,
+    }
+
+    if (originalPosition) {
+      // @ts-ignore
+      ref.current.animate([originalPosition, modalPosition], {
+        duration: modalOpeningDuration,
+        fill: 'forwards',
+        easing: 'ease-out',
+      })
+    }
+
+    setTimeout(() => setWaitedLongEnough(true), modalOpeningDuration * 2)
+  }, [modalHeight, modalWith, originalPosition])
 
   return (
     <Fragment>
@@ -50,8 +70,8 @@ const SkinModal = ({
           left: 15vw;
           top: 10vh;
           z-index: 10;
-          width: ${width * 0.7}px;
-          height: ${(width * 0.7 * 9) / 16}px;
+          width: ${modalWith};
+          height: ${modalHeight};
           background-color: #fff;
           min-height: 20px;
           animation-fill-mode: forwards;

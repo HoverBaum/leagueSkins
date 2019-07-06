@@ -11,6 +11,7 @@ export interface Skin {
   splashImageUrl: string
   name: string
   shortName: string
+  number: number
 }
 
 export interface SkinLoaded {
@@ -18,9 +19,12 @@ export interface SkinLoaded {
   loadingImage: string
   splashImage: string
   shortName: string
+  number: number
 }
 
-export interface Point {
-  x: number,
-  y: number
+export interface Position {
+  left: string
+  top: string
+  width: string
+  height: string
 }

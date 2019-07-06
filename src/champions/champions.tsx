@@ -2,7 +2,7 @@ import React from 'react'
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 
-import { Champion, Skin, SkinLoaded } from './champion'
+import { Champion, Position } from './champion'
 import { useEffect, useState } from 'react'
 import SkinModal from './skin-modal'
 import Loader from '../loader'
@@ -83,9 +83,10 @@ const Champions = () => {
     <React.Fragment>
       {selectedChampion && (
         <SkinModal
-          loadingImageURL={selectedChampion.image}
-          skins={selectedChampion.skins}
+          loadingImageURL={selectedChampion.champion.image}
+          skins={selectedChampion.champion.skins}
           onClose={() => setSelectedChampion(null)}
+          originalPosition={selectedChampion.startPosition}
         />
       )}
       {champions.length > 0 && (
@@ -107,7 +108,9 @@ const Champions = () => {
                 key={cha.id}
                 name={cha.name}
                 imageURL={cha.image}
-                onClick={() => setSelectedChampion(cha)}
+                onClick={(startPosition: Position) =>
+                  setSelectedChampion({ champion: cha, startPosition })
+                }
               />
             )}
           />

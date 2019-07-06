@@ -26,6 +26,7 @@ const SkinDisplay = ({
         const indexDifference = index - currentIndex
         return (
           <img
+            key={skin.number}
             src={skin.splashImage}
             css={css`
               width: 100%;
@@ -37,7 +38,7 @@ const SkinDisplay = ({
               transition: 0.3s ease-out;
               box-shadow: -10px 0px 5px 0px rgba(0, 0, 0, 0.75);
             `}
-            alt={skin.splashImage}
+            alt={skin.name}
           />
         )
       })}
