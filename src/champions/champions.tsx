@@ -8,20 +8,23 @@ import SkinModal from './skin-modal'
 import Loader from '../loader'
 import ChaList from './cha-list'
 import SmallCha from './small-cha'
+import TextInput from '../text-input'
 
 const Champions = () => {
   const initialChampionState: Champion[] = []
   const [champions, setChampions] = useState(initialChampionState)
   const [selectedChampion, setSelectedChampion] = useState()
   const [shouldDisplaySpinnerYet, setShouldDisplaySpinnerYet] = useState(false)
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
     const fetchChas = async () => {
-      const skinsUrl = /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
-        window.location.hostname
-      )
-        ? '/testData/skins.json'
-        : '/skins.json'
+      const skinsUrl =
+        /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
+          window.location.hostname
+        ) && window.location.search.indexOf('all') === -1
+          ? '/testData/skins.json'
+          : '/skins.json'
       const champions = await fetch(skinsUrl).then(response => response.json())
       const championsWithImages: Champion[] = await Promise.all(
         champions.map(
@@ -56,6 +59,8 @@ const Champions = () => {
     }, 100)
   }, [])
 
+  const filterRegEx = new RegExp(filter, 'i')
+
   return (
     <React.Fragment>
       {selectedChampion && (
@@ -66,17 +71,30 @@ const Champions = () => {
         />
       )}
       {champions.length > 0 && (
-        <ChaList
-          champions={champions}
-          renderItem={(cha: Champion) => (
-            <SmallCha
-              key={cha.id}
-              name={cha.name}
-              imageURL={cha.image}
-              onClick={() => setSelectedChampion(cha)}
-            />
-          )}
-        />
+        <React.Fragment>
+          <TextInput
+            styles={css`
+              max-width: 50rem;
+              margin: 0 auto;
+              margin-bottom: 2rem;
+            `}
+            value={filter}
+            onChange={setFilter}
+          />
+          <ChaList
+            champions={champions.filter(
+              cha => filter === '' || filterRegEx.test(cha.name)
+            )}
+            renderItem={(cha: Champion) => (
+              <SmallCha
+                key={cha.id}
+                name={cha.name}
+                imageURL={cha.image}
+                onClick={() => setSelectedChampion(cha)}
+              />
+            )}
+          />
+        </React.Fragment>
       )}
       {champions.length === 0 && shouldDisplaySpinnerYet && (
         <div

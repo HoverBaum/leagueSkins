@@ -15,6 +15,9 @@ const ChaList = ({
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      padding: 0;
+      margin: 0 auto;
+      ${champions.length === 1 ? 'justify-content: center;' : ''}
     `}
   >
     {champions.map(renderItem)}
