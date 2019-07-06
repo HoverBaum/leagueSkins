@@ -16,7 +16,16 @@ const TextInput = ({
   value: string
   styles: SerializedStyles
 }) => (
-  <div css={styles}>
+  <div
+    css={[
+      styles,
+      css`
+        & .mdc-text-field--focused .mdc-floating-label {
+          color: var(--mdc-theme-primary);
+        }
+      `,
+    ]}
+  >
     <TextField
       label="Filter"
       onTrailingIconSelect={() => onChange('')}
@@ -24,6 +33,7 @@ const TextInput = ({
       css={css`
         width: 100%;
       `}
+      outlined
     >
       <Input
         value={value}

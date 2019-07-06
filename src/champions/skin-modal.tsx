@@ -110,7 +110,7 @@ const SkinModal = ({
             <img
               src={loadingImageURL}
               css={css`
-                border: 3px solid #1469cc;
+                border: 3px solid var(--theme-primary);
                 border-radius: 50%;
                 box-sizing: border-box;
                 width: 84px;

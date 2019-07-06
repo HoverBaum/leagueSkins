@@ -12,12 +12,19 @@ const ChaList = ({
 }) => (
   <ul
     css={css`
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
       padding: 0;
       margin: 0 auto;
-      ${champions.length === 1 ? 'justify-content: center;' : ''}
+      /* For fex champions we position them centered, like search results. */
+      ${champions.length <= 5
+        ? css`
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+          `
+        : css`
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          `}
     `}
   >
     {champions.map(renderItem)}

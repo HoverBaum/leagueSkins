@@ -28,7 +28,7 @@ const SmallCha = ({
         box-sizing: border-box;
         &:hover {
           border-radius: 50%;
-          border: 3px solid #ffd700;
+          border: 3px solid var(--theme-accent);
         }
       `}
       src={imageURL}

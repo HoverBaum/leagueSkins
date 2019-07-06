@@ -55,7 +55,7 @@ const Loader = ({ styles = css`` }: { styles?: SerializedStyles }) => (
           stroke-dasharray: 1, 200;
           stroke-dashoffset: 0;
           animation: ${dash} 1.5s ease-in-out infinite;
-          stroke: #ffd700;
+          stroke: var(--theme-accent);
           stroke-linecap: round;
         `}
         cx="50"

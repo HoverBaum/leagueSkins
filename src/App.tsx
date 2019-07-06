@@ -17,9 +17,20 @@ const App: React.FC = () => {
       >
         <Global
           styles={css`
+            html {
+              --color-blue: #1469cc;
+              --color-yellow: #ffd700;
+              --color-really-dark-blue: #02182b;
+
+              --theme-primary: var(--color-blue);
+              --theme-accent: var(--color-yellow);
+              --theme-text: var(--color-really-dark-blue);
+
+              --mdc-theme-primary: var(--theme-primary);
+            }
             * {
               font-family: 'Roboto', sans-serif;
-              color: #02182b;
+              color: var(--theme-text);
             }
             html,
             body,
@@ -42,7 +53,7 @@ const App: React.FC = () => {
               margin-top: 2em;
             }
             a {
-              color: #1469cc;
+              color: var(--color-blue);
             }
           `}
         />

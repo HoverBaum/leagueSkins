@@ -10,7 +10,7 @@ const Footer = () => (
       padding-bottom: 0.5rem;
       display: flex;
       justify-content: center;
-      border-top: 1px solid #02182b;
+      border-top: 1px solid var(--theme-text);
     `}
   >
     <ul
