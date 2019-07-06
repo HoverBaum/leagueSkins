@@ -71,17 +71,6 @@ const SkinSelector = ({
           />
         )
       })}
-      <span
-        css={css`
-          position: absolute;
-          top: -30px;
-          color: white;
-          font-family: sans-serif;
-          text-shadow: 1px 1px 0px #000;
-        `}
-      >
-        {skins[currentSkinIndex].shortName}
-      </span>
     </div>
   )
 }

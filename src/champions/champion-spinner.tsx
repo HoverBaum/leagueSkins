@@ -33,6 +33,7 @@ const ChampionSpinner = ({ skins }: { skins: SkinLoaded[] }) => {
             top: 40%;
             left: 52%;
             font-size: 2em;
+            font-weight: 300;
           `}
         >
           {skins[currentSkindIndex].name}
