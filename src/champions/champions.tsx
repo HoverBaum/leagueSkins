@@ -22,7 +22,7 @@ const Champions = () => {
       )
         ? '/testData/skins.json'
         : '/skins.json'
-      const champions = await fetch('/skins.json').then(response => response.json())
+      const champions = await fetch(skinsUrl).then(response => response.json())
       const championsWithImages: Champion[] = await Promise.all(
         champions.map(
           (champion: Champion) =>

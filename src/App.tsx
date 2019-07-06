@@ -1,22 +1,63 @@
-import React from 'react'
-import { Global, css } from '@emotion/core'
+/** @jsx jsx */
+import { Global, jsx, css } from '@emotion/core'
 import Champions from './champions/champions'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import About from './about'
+import Footer from './footer'
 
 const App: React.FC = () => {
   return (
-    <>
-      <Global
-        styles={css`
-          * {
-            font-family: sans-serif;
-          }
+    <Router>
+      <div
+        css={css`
+          display: flex;
+          flex-direction: column;
+          height: 100%;
         `}
-      />
-      <header>
-        <h1>League Skins</h1>
-        <Champions />
-      </header>
-    </>
+      >
+        <Global
+          styles={css`
+            * {
+              font-family: 'Roboto', sans-serif;
+              color: #02182b;
+            }
+            html,
+            body,
+            #root {
+              height: 100%;
+              padding: 0;
+              margin: 0;
+            }
+            h1 {
+              font-weight: 300;
+              font-size: 3rem;
+            }
+            h2 {
+              font-weight: 300;
+              font-size: 2rem;
+            }
+            a {
+              color: #1469cc;
+            }
+          `}
+        />
+        <header>
+          <h1 style={{ textAlign: 'center' }}>League Skins</h1>
+        </header>
+
+        <main
+          css={css`
+            flex: 1;
+            padding: 2rem;
+          `}
+        >
+          <Route path="/" exact component={Champions} />
+          <Route path="/about" exact component={About} />
+        </main>
+
+        <Footer />
+      </div>
+    </Router>
   )
 }
 

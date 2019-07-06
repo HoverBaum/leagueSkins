@@ -37,6 +37,7 @@ const SkinDisplay = ({
               transition: 0.3s ease-out;
               box-shadow: -10px 0px 5px 0px rgba(0, 0, 0, 0.75);
             `}
+            alt={skin.splashImage}
           />
         )
       })}
