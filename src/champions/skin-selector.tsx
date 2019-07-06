@@ -32,17 +32,19 @@ const SkinSelector = ({
         const indexDifference = index - currentSkinIndex
         const translateDistance = 30
         const translateBaseDistance = 30
+        let factorForTranslation = indexDifference
+        if (factorForTranslation < -5) factorForTranslation = -5
+        if (factorForTranslation > 5) factorForTranslation = 5
         const xTranslate = isCurrent
           ? '-50%'
           : `${
               indexDifference < 0
-                ? indexDifference * translateDistance -
+                ? factorForTranslation * translateDistance -
                   (100 + translateBaseDistance)
-                : indexDifference * translateDistance + translateBaseDistance
+                : factorForTranslation * translateDistance +
+                  translateBaseDistance
             }%`
-        const yRotate = isCurrent
-          ? '0deg'
-          : `${indexDifference < 0 ? '-' : ''}25deg`
+        const yRotate = isCurrent ? '0deg' : `${indexDifference * 5}deg`
         const currentBoxShadow =
           '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)'
         const boxShadow =
