@@ -12,13 +12,24 @@ const fetchJson = url =>
         })
 
         res.on('end', () => {
-          const parsed = JSON.parse(body)
-          resolve(parsed)
+          try {
+            const parsed = JSON.parse(body)
+            resolve(parsed)
+          } catch (e) {
+            console.log('Failed to parse JSON response!')
+            console.log(e)
+            console.log('Body:')
+            console.log(body)
+          }
         })
       })
       .on('error', e => {
         reject(e)
       })
+  }).catch(e => {
+    console.log('Error in fetching JSON:')
+    console.log('URL was: ', url)
+    console.log(e)
   })
 
 const skinIdToNumber = (id, championKey) => {
@@ -59,6 +70,8 @@ const start = async () => {
   console.log(`Found ${champions.length} champions`)
 
   console.log('Getting additional data...')
+  const totalChampions = champions.length
+  let fetchedChampions = 0
   const championsWithSkins = await Promise.all(
     champions.map(
       champion =>
@@ -86,6 +99,10 @@ const start = async () => {
               shortName: createShortName(skin.name, champion.name),
             }
           })
+          fetchedChampions += 1
+          console.log(
+            `Fetched champions: ${fetchedChampions}/${totalChampions}`
+          )
           resolve({
             name: champion.name,
             id: champion.id,
