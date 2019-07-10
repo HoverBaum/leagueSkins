@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Global, jsx, css } from '@emotion/core'
 import Champions from './champions/champions'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import About from './about'
 import Footer from './footer'
 
@@ -61,7 +61,9 @@ const App: React.FC = () => {
           `}
         />
         <header>
-          <h1 style={{ textAlign: 'center' }}>League Skins</h1>
+          <Link to="/" css={{ textDecoration: 'none' }}>
+            <h1 style={{ textAlign: 'center' }}>League Skins</h1>
+          </Link>
         </header>
 
         <main
