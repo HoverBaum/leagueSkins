@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.0.14",
+    "@material/react-button": "^0.14.1",
     "@material/react-material-icon": "^0.14.1",
     "@material/react-text-field": "^0.14.1",
     "@types/classnames": "^2.2.9",

@@ -1,6 +1,8 @@
 import React from 'react'
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
+import '@material/react-button/dist/button.css'
+import Button from '@material/react-button'
 
 import { Champion, Position } from './champion'
 import { useEffect, useState } from 'react'
@@ -10,11 +12,14 @@ import ChaList from './cha-list'
 import SmallCha from './small-cha'
 import TextInput from '../text-input'
 
+// TODO: Refactor loading to have a loading state so we can display spinner until all are done and then display error.
+
 const Champions = () => {
   const initialChampionState: Champion[] = []
   const [champions, setChampions] = useState(initialChampionState)
   const [selectedChampion, setSelectedChampion] = useState()
   const [shouldDisplaySpinnerYet, setShouldDisplaySpinnerYet] = useState(false)
+  const [error, setError] = useState('')
   const [filter, setFilter] = useState('')
 
   const filterChampions = (
@@ -37,39 +42,44 @@ const Champions = () => {
     return filteredChampions
   }
 
-  useEffect(() => {
-    const fetchChas = async () => {
-      const skinsUrl =
-        /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
-          window.location.hostname
-        ) && window.location.search.indexOf('all') === -1
-          ? '/testData/skins.json'
-          : '/skins.json'
-      const champions = await fetch(skinsUrl).then(response => response.json())
-      const championsWithImages: Champion[] = await Promise.all(
-        champions.map(
-          (champion: Champion) =>
-            new Promise(resolve => {
-              const image = new Image()
-              image.setAttribute('crossOrigin', 'Anonymous')
-              image.onload = () => {
-                const canvas = document.createElement('canvas')
-                canvas.width = image.naturalWidth
-                canvas.height = image.naturalHeight
-                const context = canvas.getContext('2d')
-                if (context) context.drawImage(image, 0, 0)
-                resolve({
-                  ...champion,
-                  image: canvas.toDataURL(),
-                })
-              }
-              image.src = champion.squareImageUrl
-            })
-        )
+  const fetchChas = async () => {
+    setError('')
+    const skinsUrl =
+      /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
+        window.location.hostname
+      ) && window.location.search.indexOf('all') === -1
+        ? '/testData/skins.json'
+        : '/skins.json'
+    const champions = await fetch(skinsUrl)
+      .then(response => response.json())
+      .catch(e => setError(e.toStrin()))
+    const championsWithImages: Champion[] = await Promise.all(
+      champions.map(
+        (champion: Champion) =>
+          new Promise((resolve, reject) => {
+            const image = new Image()
+            image.setAttribute('crossOrigin', 'Anonymous')
+            image.onload = () => {
+              const canvas = document.createElement('canvas')
+              canvas.width = image.naturalWidth
+              canvas.height = image.naturalHeight
+              const context = canvas.getContext('2d')
+              if (context) context.drawImage(image, 0, 0)
+              resolve({
+                ...champion,
+                image: canvas.toDataURL(),
+              })
+            }
+            image.onerror = () => setError('Failed loading small Images')
+            image.src = champion.squareImageUrl
+          })
       )
-      console.log('chas', champions)
-      setChampions(championsWithImages)
-    }
+    )
+    console.log('chas', champions)
+    setChampions(championsWithImages)
+  }
+
+  useEffect(() => {
     fetchChas()
 
     // Make sure we only show a loading spinner to the user when loading does
@@ -116,7 +126,7 @@ const Champions = () => {
           />
         </React.Fragment>
       )}
-      {champions.length === 0 && shouldDisplaySpinnerYet && (
+      {champions.length === 0 && shouldDisplaySpinnerYet && !error && (
         <div
           css={css`
             display: flex;
@@ -124,6 +134,34 @@ const Champions = () => {
           `}
         >
           <Loader />
+        </div>
+      )}
+      {error && (
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          `}
+        >
+          <p
+            css={css`
+              color: var(--theme-alert);
+              font-size: 1.33rem;
+              margin: 2rem;
+            `}
+          >
+            <span role="img" aria-label="Sirene Emoji">
+              🚨
+            </span>
+            {error}{' '}
+            <span role="img" aria-label="Sirene Emoji">
+              🚨
+            </span>
+          </p>
+          <Button onClick={fetchChas} outlined>
+            Try again
+          </Button>
         </div>
       )}
     </React.Fragment>
