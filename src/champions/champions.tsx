@@ -5,20 +5,19 @@ import '@material/react-button/dist/button.css'
 import Button from '@material/react-button'
 
 import { Champion, Position } from './champion'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import SkinModal from './skin-modal'
 import Loader from '../loader'
 import ChaList from './cha-list'
 import SmallCha from './small-cha'
 import TextInput from '../text-input'
 
-// TODO: Refactor loading to have a loading state so we can display spinner until all are done and then display error.
-
 const Champions = () => {
   const initialChampionState: Champion[] = []
   const [champions, setChampions] = useState(initialChampionState)
   const [selectedChampion, setSelectedChampion] = useState()
   const [shouldDisplaySpinnerYet, setShouldDisplaySpinnerYet] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [filter, setFilter] = useState('')
 
@@ -42,7 +41,8 @@ const Champions = () => {
     return filteredChampions
   }
 
-  const fetchChas = async () => {
+  const fetchChas = useCallback(async () => {
+    setLoading(true)
     setError('')
     const skinsUrl =
       /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
@@ -50,34 +50,42 @@ const Champions = () => {
       ) && window.location.search.indexOf('all') === -1
         ? '/testData/skins.json'
         : '/skins.json'
-    const champions = await fetch(skinsUrl)
-      .then(response => response.json())
-      .catch(e => setError(e.toStrin()))
-    const championsWithImages: Champion[] = await Promise.all(
-      champions.map(
-        (champion: Champion) =>
-          new Promise((resolve, reject) => {
-            const image = new Image()
-            image.setAttribute('crossOrigin', 'Anonymous')
-            image.onload = () => {
-              const canvas = document.createElement('canvas')
-              canvas.width = image.naturalWidth
-              canvas.height = image.naturalHeight
-              const context = canvas.getContext('2d')
-              if (context) context.drawImage(image, 0, 0)
-              resolve({
-                ...champion,
-                image: canvas.toDataURL(),
-              })
-            }
-            image.onerror = () => setError('Failed loading small Images')
-            image.src = champion.squareImageUrl
-          })
+
+    let champions
+    let championsWithImages
+    try {
+      champions = await fetch(skinsUrl).then(response => response.json())
+      championsWithImages = await Promise.all(
+        champions.map(
+          (champion: Champion) =>
+            new Promise((resolve, reject) => {
+              const image = new Image()
+              image.setAttribute('crossOrigin', 'Anonymous')
+              image.onload = () => {
+                const canvas = document.createElement('canvas')
+                canvas.width = image.naturalWidth
+                canvas.height = image.naturalHeight
+                const context = canvas.getContext('2d')
+                if (context) context.drawImage(image, 0, 0)
+                resolve({
+                  ...champion,
+                  image: canvas.toDataURL(),
+                })
+              }
+              image.onerror = () => reject()
+              image.src = champion.squareImageUrl
+            })
+        )
       )
-    )
+    } catch (e) {
+      setLoading(false)
+      setError('Failed loading champions')
+    }
+
     console.log('chas', champions)
-    setChampions(championsWithImages)
-  }
+    setLoading(false)
+    setChampions(championsWithImages as Champion[])
+  }, [])
 
   useEffect(() => {
     fetchChas()
@@ -87,7 +95,7 @@ const Champions = () => {
     setTimeout(() => {
       setShouldDisplaySpinnerYet(true)
     }, 100)
-  }, [])
+  }, [fetchChas])
 
   return (
     <React.Fragment>
@@ -99,7 +107,7 @@ const Champions = () => {
           originalPosition={selectedChampion.startPosition}
         />
       )}
-      {champions.length > 0 && (
+      {!loading && !error && champions && champions.length > 0 && (
         <React.Fragment>
           <TextInput
             styles={css`
@@ -126,7 +134,7 @@ const Champions = () => {
           />
         </React.Fragment>
       )}
-      {champions.length === 0 && shouldDisplaySpinnerYet && !error && (
+      {loading && shouldDisplaySpinnerYet && (
         <div
           css={css`
             display: flex;
@@ -136,7 +144,7 @@ const Champions = () => {
           <Loader />
         </div>
       )}
-      {error && (
+      {error && !loading && (
         <div
           css={css`
             display: flex;
