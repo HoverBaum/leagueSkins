@@ -3,23 +3,26 @@ import React from 'react'
 import { jsx, css } from '@emotion/core'
 import '@material/react-button/dist/button.css'
 import Button from '@material/react-button'
+import '@material/react-linear-progress/dist/linear-progress.css'
+import LinearProgress from '@material/react-linear-progress'
 
 import { Champion, Position } from './champion'
 import { useEffect, useState, useCallback } from 'react'
 import SkinModal from './skin-modal'
-import Loader from '../loader'
 import ChaList from './cha-list'
 import SmallCha from './small-cha'
 import TextInput from '../text-input'
+import useLoaderState from '../hooks/useLoaderStates'
 
 const Champions = () => {
   const initialChampionState: Champion[] = []
   const [champions, setChampions] = useState(initialChampionState)
   const [selectedChampion, setSelectedChampion] = useState()
-  const [shouldDisplaySpinnerYet, setShouldDisplaySpinnerYet] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [filter, setFilter] = useState('')
+  const [shouldDisplayLoader] = useLoaderState()
+  const [championProgress, setchampionProgress] = useState(0)
 
   const filterChampions = (
     champions: Champion[],
@@ -44,6 +47,7 @@ const Champions = () => {
   const fetchChas = useCallback(async () => {
     setLoading(true)
     setError('')
+    setchampionProgress(0)
     const skinsUrl =
       /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
         window.location.hostname
@@ -53,6 +57,7 @@ const Champions = () => {
 
     let champions
     let championsWithImages
+    let loadedChampions = 0
     try {
       champions = await fetch(skinsUrl).then(response => response.json())
       championsWithImages = await Promise.all(
@@ -71,6 +76,8 @@ const Champions = () => {
                   ...champion,
                   image: canvas.toDataURL(),
                 })
+                loadedChampions += 1
+                setchampionProgress(loadedChampions / champions.length)
               }
               image.onerror = () => reject()
               image.src = champion.squareImageUrl
@@ -89,12 +96,6 @@ const Champions = () => {
 
   useEffect(() => {
     fetchChas()
-
-    // Make sure we only show a loading spinner to the user when loading does
-    // not feel instant to them.
-    setTimeout(() => {
-      setShouldDisplaySpinnerYet(true)
-    }, 100)
   }, [fetchChas])
 
   return (
@@ -134,14 +135,18 @@ const Champions = () => {
           />
         </React.Fragment>
       )}
-      {loading && shouldDisplaySpinnerYet && (
+      {loading && shouldDisplayLoader && (
         <div
           css={css`
-            display: flex;
-            justify-content: center;
+            max-width: 50rem;
+            margin: 0 auto;
           `}
         >
-          <Loader />
+          <LinearProgress
+            progress={championProgress}
+            indeterminate={championProgress === 0}
+          />
+          <p css={{ textAlign: 'center' }}>Loading Champions</p>
         </div>
       )}
       {error && !loading && (
