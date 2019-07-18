@@ -25,13 +25,14 @@ const SkinModal = ({
   const ref = useRef(null)
   useOutsideClick(ref, onClose)
 
-  const modalWith = `${width * 0.7}px`
-  const modalHeight = `${(width * 0.7 * 9) / 16}px`
+  const widthRation = width > 1280 ? 0.7 : 0.9
+  const modalWith = `${width * widthRation}px`
+  const modalHeight = `${(width * widthRation * 9) / 16}px`
 
   useEffect(() => {
     const modalOpeningDuration = 300
     const modalPosition: Position = {
-      left: '15vw',
+      left: `${((1 - widthRation) / 2) * 100}vw`,
       top: '10vh',
       width: modalWith,
       height: modalHeight,
@@ -47,7 +48,7 @@ const SkinModal = ({
     }
 
     setTimeout(() => setWaitedLongEnough(true), modalOpeningDuration * 2)
-  }, [modalHeight, modalWith, originalPosition])
+  }, [modalHeight, modalWith, originalPosition, widthRation])
 
   return (
     <Fragment>
