@@ -25,7 +25,7 @@ const SkinModal = ({
   const ref = useRef(null)
   useOutsideClick(ref, onClose)
 
-  const widthRation = width > 1280 ? 0.7 : 0.9
+  const widthRation = width > 1440 ? 0.7 : 0.9
   const modalWith = `${width * widthRation}px`
   const modalHeight = `${(width * widthRation * 9) / 16}px`
 
