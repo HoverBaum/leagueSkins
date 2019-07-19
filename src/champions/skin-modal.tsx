@@ -48,7 +48,7 @@ const SkinModal = ({
     }
 
     setTimeout(() => setWaitedLongEnough(true), modalOpeningDuration * 2)
-  }, [modalHeight, modalWith, originalPosition, width, widthRation])
+  }, [modalHeight, modalWith, originalPosition, width])
 
   return (
     <Fragment>

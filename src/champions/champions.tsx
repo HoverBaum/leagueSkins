@@ -13,6 +13,8 @@ import ChaList from './cha-list'
 import SmallCha from './small-cha'
 import TextInput from '../text-input'
 import useLoaderState from '../hooks/useLoaderStates'
+import useBreakpoints from '../hooks/useBreakpoints'
+import SkinOverlay from './skin-overlay'
 
 const Champions = () => {
   const initialChampionState: Champion[] = []
@@ -23,6 +25,7 @@ const Champions = () => {
   const [filter, setFilter] = useState('')
   const [shouldDisplayLoader] = useLoaderState()
   const [championProgress, setchampionProgress] = useState(0)
+  const { isMobile } = useBreakpoints()
 
   const filterChampions = (
     champions: Champion[],
@@ -92,6 +95,8 @@ const Champions = () => {
     console.log('chas', champions)
     setLoading(false)
     setChampions(championsWithImages as Champion[])
+
+    setSelectedChampion({ champion: champions[1] })
   }, [])
 
   useEffect(() => {
@@ -100,12 +105,18 @@ const Champions = () => {
 
   return (
     <React.Fragment>
-      {selectedChampion && (
+      {selectedChampion && !isMobile && (
         <SkinModal
           loadingImageURL={selectedChampion.champion.image}
           skins={selectedChampion.champion.skins}
           onClose={() => setSelectedChampion(null)}
           originalPosition={selectedChampion.startPosition}
+        />
+      )}
+      {selectedChampion && isMobile && (
+        <SkinOverlay
+          onClose={() => setSelectedChampion(null)}
+          skins={selectedChampion.champion.skins}
         />
       )}
       {!loading && !error && champions && champions.length > 0 && (
