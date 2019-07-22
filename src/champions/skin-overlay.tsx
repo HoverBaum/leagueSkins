@@ -30,10 +30,10 @@ const SkinOverlay = ({
         css={css`
           position: absolute;
           top: 1rem;
-          right: 1rem;
+          left: 1rem;
           cursor: pointer;
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           align-items: center;
           opacity: 0.66;
           color: var(--theme-text);
@@ -43,7 +43,7 @@ const SkinOverlay = ({
         `}
         onClick={() => onClose()}
       >
-        <MaterialIcon className="close-icon" role="button" icon="close" />
+        <MaterialIcon className="close-icon" role="button" icon="arrow_back" />
         <span
           css={css`
             font-size: 0.8em;
