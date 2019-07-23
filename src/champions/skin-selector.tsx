@@ -18,13 +18,9 @@ const SkinSelector = ({
     <div
       ref={ref}
       css={css`
-        position: absolute;
         width: 600px;
         height: 200px;
         perspective: 1000px;
-        bottom: 5%;
-        left: 2%;
-        z-index: 1000;
       `}
     >
       {skins.map((skin, index) => {

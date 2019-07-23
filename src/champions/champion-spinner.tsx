@@ -11,11 +11,20 @@ const ChampionSpinner = ({ skins }: { skins: SkinLoaded[] }) => {
   return (
     <Fragment>
       <SkinDisplay skins={skins} currentIndex={currentSkindIndex} />
-      <SkinSelector
-        skins={skins}
-        currentSkinIndex={currentSkindIndex}
-        setCurrentSkinIndex={setCurrentSkinIndex}
-      />
+      <div
+        css={css`
+          position: absolute;
+          bottom: 5%;
+          left: 2%;
+          z-index: 1000;
+        `}
+      >
+        <SkinSelector
+          skins={skins}
+          currentSkinIndex={currentSkindIndex}
+          setCurrentSkinIndex={setCurrentSkinIndex}
+        />
+      </div>
       <div
         css={css`
           position: absolute;

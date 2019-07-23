@@ -4,6 +4,8 @@ import MaterialIcon from '@material/react-material-icon'
 import useSkinImages from './useSkinImages'
 import { Skin, SkinLoaded } from './champion'
 import SkinSwiper from './skin-swiper'
+import SkinSelector from './skin-selector'
+import { useState } from 'react'
 
 const SkinOverlay = ({
   onClose,
@@ -13,6 +15,7 @@ const SkinOverlay = ({
   skins: Skin[]
 }) => {
   const loadedSkins: SkinLoaded[] = useSkinImages(skins)
+  const [skinIndex, setSkinIndex] = useState(0)
   return (
     <div
       css={css`
@@ -59,7 +62,12 @@ const SkinOverlay = ({
           position: relative;
         `}
       >
-        <SkinSwiper skins={loadedSkins} />
+        {/* <SkinSwiper skins={loadedSkins} /> */}
+        <SkinSwiper
+          skins={loadedSkins}
+          currentSkinIndex={skinIndex}
+          setCurrentSkinIndex={setSkinIndex}
+        />
       </div>
     </div>
   )
