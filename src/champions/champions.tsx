@@ -95,8 +95,6 @@ const Champions = () => {
     console.log('chas', champions)
     setLoading(false)
     setChampions(championsWithImages as Champion[])
-
-    setSelectedChampion({ champion: champions[1] })
   }, [])
 
   useEffect(() => {
@@ -115,6 +113,7 @@ const Champions = () => {
       )}
       {selectedChampion && isMobile && (
         <SkinOverlay
+          loadingImageURL={selectedChampion.champion.image}
           onClose={() => setSelectedChampion(null)}
           skins={selectedChampion.champion.skins}
         />

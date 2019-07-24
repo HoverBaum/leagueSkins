@@ -6,11 +6,14 @@ import { Skin, SkinLoaded } from './champion'
 import SkinSwiper from './skin-swiper'
 import { useState } from 'react'
 import useBreakpoints from '../hooks/useBreakpoints'
+import Loader from '../loader'
 
 const SkinOverlay = ({
+  loadingImageURL,
   onClose,
   skins,
 }: {
+  loadingImageURL: string
   onClose: Function
   skins: Skin[]
 }) => {
@@ -30,6 +33,36 @@ const SkinOverlay = ({
         ${isLandscape ? '' : 'padding-top: 1rem;'}
       `}
     >
+      {loadedSkins.length === 0 && (
+        <div
+          css={css`
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          `}
+        >
+          <img
+            src={loadingImageURL}
+            css={css`
+              border: 3px solid var(--theme-primary);
+              border-radius: 50%;
+              box-sizing: border-box;
+              width: 84px;
+              height: 84px;
+            `}
+            alt="Loading skins"
+          />
+          <Loader
+            styles={css`
+              position: absolute;
+              top: -9px;
+              left: -9px;
+              width: 102px;
+            `}
+          />
+        </div>
+      )}
       {/* Close button */}
       <div
         css={css`
