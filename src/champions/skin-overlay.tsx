@@ -4,8 +4,8 @@ import MaterialIcon from '@material/react-material-icon'
 import useSkinImages from './useSkinImages'
 import { Skin, SkinLoaded } from './champion'
 import SkinSwiper from './skin-swiper'
-import SkinSelector from './skin-selector'
 import { useState } from 'react'
+import useBreakpoints from '../hooks/useBreakpoints'
 
 const SkinOverlay = ({
   onClose,
@@ -16,6 +16,7 @@ const SkinOverlay = ({
 }) => {
   const loadedSkins: SkinLoaded[] = useSkinImages(skins)
   const [skinIndex, setSkinIndex] = useState(0)
+  const { isLandscape } = useBreakpoints()
   return (
     <div
       css={css`
@@ -26,6 +27,9 @@ const SkinOverlay = ({
         left: 0;
         background-color: white;
         z-index: 10;
+        padding-top: 1rem;
+        display: flex;
+        flex-direction: column;
       `}
     >
       {/* Close button */}
@@ -52,14 +56,22 @@ const SkinOverlay = ({
             font-size: 0.8em;
           `}
         >
-          Close
+          Champions
         </span>
       </div>
       {/* END close button */}
+      <h1
+        css={css`
+          margin: 1em 0;
+          text-align: center;
+        `}
+      >
+        {skins[0].name}
+      </h1>
       <div
         css={css`
-          margin-top: 6rem;
           position: relative;
+          flex-grow: 1;
         `}
       >
         {/* <SkinSwiper skins={loadedSkins} /> */}
@@ -69,6 +81,21 @@ const SkinOverlay = ({
           setCurrentSkinIndex={setSkinIndex}
         />
       </div>
+      {!isLandscape && (
+        <span
+          css={css`
+            display: block;
+            width: 100%;
+            opacity: 0.333;
+            font-size: 0.8rem;
+            text-align: center;
+            position: absolute;
+            bottom: 2rem;
+          `}
+        >
+          Turn your device for a better view.
+        </span>
+      )}
     </div>
   )
 }

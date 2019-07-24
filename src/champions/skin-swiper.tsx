@@ -47,40 +47,55 @@ const SkinSwiper = ({
         const boxShadow =
           '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         return (
-          <img
-            onTouchStart={e => setTouchStartX(e.changedTouches[0].clientX)}
-            onTouchEnd={e => {
-              const touchDistance = Math.abs(
-                e.changedTouches[0].clientX - touchStartX
-              )
-              const didSwipedLeft = e.changedTouches[0].clientX > touchStartX
-              if (touchDistance > 50) {
-                const nextIndex = didSwipedLeft
-                  ? currentSkinIndex - 1
-                  : currentSkinIndex + 1
-                if (nextIndex >= 0 && nextIndex < skins.length) {
-                  setCurrentSkinIndex(nextIndex)
-                }
-              }
-            }}
-            src={skin.splashImage}
-            alt={`${skin.name} selector`}
-            onClick={() => setCurrentSkinIndex(index)}
+          <div
             key={skin.name}
             css={css`
               position: absolute;
               display: block;
               width: 100%;
-              height: auto;
               transition: all 0.3s ease-out;
               cursor: pointer;
               left: 50%;
               transform: translateX(${xTranslate})
                 ${isCurrent ? 'scale(1.1)' : ''};
               z-index: ${1100 - Math.abs(indexDifference)};
-              box-shadow: ${isCurrent ? currentBoxShadow : boxShadow};
             `}
-          />
+          >
+            <img
+              onTouchStart={e => setTouchStartX(e.changedTouches[0].clientX)}
+              onTouchEnd={e => {
+                const touchDistance = Math.abs(
+                  e.changedTouches[0].clientX - touchStartX
+                )
+                const didSwipedLeft = e.changedTouches[0].clientX > touchStartX
+                if (touchDistance > 50) {
+                  const nextIndex = didSwipedLeft
+                    ? currentSkinIndex - 1
+                    : currentSkinIndex + 1
+                  if (nextIndex >= 0 && nextIndex < skins.length) {
+                    setCurrentSkinIndex(nextIndex)
+                  }
+                }
+              }}
+              src={skin.splashImage}
+              alt={`${skin.name} selector`}
+              onClick={() => setCurrentSkinIndex(index)}
+              css={css`
+                width: 100%;
+                height: auto;
+                box-shadow: ${isCurrent ? currentBoxShadow : boxShadow};
+              `}
+            />
+            {isCurrent && (
+              <h2
+                css={css`
+                  text-align: center;
+                `}
+              >
+                {skin.shortName}
+              </h2>
+            )}
+          </div>
         )
       })}
     </div>
