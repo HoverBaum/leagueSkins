@@ -27,9 +27,7 @@ const SkinOverlay = ({
         left: 0;
         background-color: white;
         z-index: 10;
-        padding-top: 1rem;
-        display: flex;
-        flex-direction: column;
+        ${isLandscape ? '' : 'padding-top: 1rem;'}
       `}
     >
       {/* Close button */}
@@ -62,16 +60,15 @@ const SkinOverlay = ({
       {/* END close button */}
       <h1
         css={css`
-          margin: 1em 0;
+          margin: ${isLandscape ? '1rem' : '1em'} 0;
           text-align: center;
         `}
       >
-        {skins[0].name}
+        {isLandscape ? skins[skinIndex].name : skins[0].name}
       </h1>
       <div
         css={css`
           position: relative;
-          flex-grow: 1;
         `}
       >
         {/* <SkinSwiper skins={loadedSkins} /> */}
