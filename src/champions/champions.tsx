@@ -7,25 +7,23 @@ import '@material/react-linear-progress/dist/linear-progress.css'
 import LinearProgress from '@material/react-linear-progress'
 
 import { Champion, Position } from './champion'
-import { useEffect, useState, useCallback } from 'react'
-import SkinModal from './skin-modal'
+import { useState } from 'react'
 import ChaList from './cha-list'
 import SmallCha from './small-cha'
 import TextInput from '../text-input'
 import useLoaderState from '../hooks/useLoaderStates'
-import useBreakpoints from '../hooks/useBreakpoints'
-import SkinOverlay from './skin-overlay'
+import { Route } from 'react-router'
+import SkinExplorer from './skin-explorer'
+import { Link } from 'react-router-dom'
+import useChampions from './useChampions'
 
-const Champions = () => {
-  const initialChampionState: Champion[] = []
-  const [champions, setChampions] = useState(initialChampionState)
-  const [selectedChampion, setSelectedChampion] = useState()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+const Champions = ({ match }: { match: any }) => {
+  const [startPosition, setStartPosition] = useState()
+
   const [filter, setFilter] = useState('')
   const [shouldDisplayLoader] = useLoaderState()
-  const [championProgress, setchampionProgress] = useState(0)
-  const { isMobile } = useBreakpoints()
+
+  const { champions, loading, error, championProgress } = useChampions()
 
   const filterChampions = (
     champions: Champion[],
@@ -47,77 +45,19 @@ const Champions = () => {
     return filteredChampions
   }
 
-  const fetchChas = useCallback(async () => {
-    setLoading(true)
-    setError('')
-    setchampionProgress(0)
-    const skinsUrl =
-      /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
-        window.location.hostname
-      ) && window.location.search.indexOf('all') === -1
-        ? '/testData/skins.json'
-        : '/skins.json'
-
-    let champions
-    let championsWithImages
-    let loadedChampions = 0
-    try {
-      champions = await fetch(skinsUrl).then(response => response.json())
-      championsWithImages = await Promise.all(
-        champions.map(
-          (champion: Champion) =>
-            new Promise((resolve, reject) => {
-              const image = new Image()
-              image.setAttribute('crossOrigin', 'Anonymous')
-              image.onload = () => {
-                const canvas = document.createElement('canvas')
-                canvas.width = image.naturalWidth
-                canvas.height = image.naturalHeight
-                const context = canvas.getContext('2d')
-                if (context) context.drawImage(image, 0, 0)
-                resolve({
-                  ...champion,
-                  image: canvas.toDataURL(),
-                })
-                loadedChampions += 1
-                setchampionProgress(loadedChampions / champions.length)
-              }
-              image.onerror = () => reject()
-              image.src = champion.squareImageUrl
-            })
-        )
-      )
-    } catch (e) {
-      setLoading(false)
-      setError('Failed loading champions')
-    }
-
-    console.log('chas', champions)
-    setLoading(false)
-    setChampions(championsWithImages as Champion[])
-  }, [])
-
-  useEffect(() => {
-    fetchChas()
-  }, [fetchChas])
-
   return (
     <React.Fragment>
-      {selectedChampion && !isMobile && (
-        <SkinModal
-          loadingImageURL={selectedChampion.champion.image}
-          skins={selectedChampion.champion.skins}
-          onClose={() => setSelectedChampion(null)}
-          originalPosition={selectedChampion.startPosition}
-        />
-      )}
-      {selectedChampion && isMobile && (
-        <SkinOverlay
-          loadingImageURL={selectedChampion.champion.image}
-          onClose={() => setSelectedChampion(null)}
-          skins={selectedChampion.champion.skins}
-        />
-      )}
+      <Route
+        path={`${match.path.replace(/\/$/, '')}/champion/:championId/skins`}
+        component={(props: any) => (
+          <SkinExplorer
+            {...props}
+            champions={champions}
+            startPosition={startPosition}
+          />
+        )}
+      />
+
       {!loading && !error && champions && champions.length > 0 && (
         <React.Fragment>
           <TextInput
@@ -133,14 +73,15 @@ const Champions = () => {
           <ChaList
             champions={filterChampions(champions, filter)}
             renderItem={(cha: Champion) => (
-              <SmallCha
-                key={cha.id}
-                name={cha.name}
-                imageURL={cha.image}
-                onClick={(startPosition: Position) =>
-                  setSelectedChampion({ champion: cha, startPosition })
-                }
-              />
+              <Link key={cha.id} to={`/champion/${cha.id}/skins`}>
+                <SmallCha
+                  name={cha.name}
+                  imageURL={cha.image}
+                  onClick={(startPosition: Position) => {
+                    setStartPosition(startPosition)
+                  }}
+                />
+              </Link>
             )}
           />
         </React.Fragment>
@@ -182,7 +123,7 @@ const Champions = () => {
               🚨
             </span>
           </p>
-          <Button onClick={fetchChas} outlined>
+          <Button onClick={() => console.log('TODO')} outlined>
             Try again
           </Button>
         </div>

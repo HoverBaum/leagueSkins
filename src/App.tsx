@@ -72,8 +72,8 @@ const App: React.FC = () => {
             padding: 2rem;
           `}
         >
-          <Route path="/" exact component={Champions} />
-          <Route path="/about" exact component={About} />
+          <Route path="/" component={Champions} />
+          <Route path="/about" component={About} />
         </main>
 
         <Footer />
