@@ -20,6 +20,12 @@ const SkinOverlay = ({
   const loadedSkins: SkinLoaded[] = useSkinImages(skins)
   const [skinIndex, setSkinIndex] = useState(0)
   const { isLandscape } = useBreakpoints()
+
+  const landscapeTitle = (skin: Skin) => {
+    if (skin.shortName === 'Default') return skin.name
+    return skin.shortName
+  }
+
   return (
     <div
       css={css`
@@ -94,10 +100,11 @@ const SkinOverlay = ({
       <h1
         css={css`
           margin: ${isLandscape ? '1rem' : '1em'} 0;
+          ${isLandscape ? 'font-size: 2rem;' : ''}
           text-align: center;
         `}
       >
-        {isLandscape ? skins[skinIndex].name : skins[0].name}
+        {isLandscape ? landscapeTitle(skins[skinIndex]) : skins[0].name}
       </h1>
       <div
         css={css`

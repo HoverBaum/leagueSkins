@@ -57,7 +57,7 @@ const SkinSwiper = ({
               cursor: pointer;
               left: 50%;
               transform: translateX(${xTranslate})
-                ${isCurrent ? 'scale(1.1)' : ''};
+                ${isCurrent ? 'scale(1.05)' : ''};
               z-index: ${1100 - Math.abs(indexDifference)};
             `}
           >
