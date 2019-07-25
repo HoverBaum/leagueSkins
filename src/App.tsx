@@ -70,6 +70,9 @@ const App: React.FC = () => {
           css={css`
             flex: 1;
             padding: 2rem;
+            @media screen and (max-width: 50rem) {
+              padding: 1rem;
+            }
           `}
         >
           <Route path="/" component={Champions} />
