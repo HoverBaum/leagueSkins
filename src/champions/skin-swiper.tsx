@@ -109,12 +109,15 @@ const SkinSwiper = ({
           >
             <img
               onTouchStart={e =>
+                isCurrent &&
                 dispatch({ type: 'start', x: e.changedTouches[0].clientX })
               }
               onTouchMove={e =>
+                isCurrent &&
                 dispatch({ type: 'swipe', x: e.changedTouches[0].clientX })
               }
               onTouchEnd={e => {
+                if (!isCurrent) return
                 const touchDistance = Math.abs(
                   e.changedTouches[0].clientX - touchStartX
                 )
