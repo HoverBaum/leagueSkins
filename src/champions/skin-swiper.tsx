@@ -6,14 +6,16 @@ import useWindowSize from '../hooks/useWindowSize'
 
 interface SwiperState {
   startX: number
-  swiping: boolean
+  isSwiping: boolean
   currentX: number
+  isSwipingRight: boolean
 }
 
 const initialSwiperState: SwiperState = {
   startX: 0,
-  swiping: false,
+  isSwiping: false,
   currentX: 0,
+  isSwipingRight: false,
 }
 
 const swipingReducer = (
@@ -23,21 +25,19 @@ const swipingReducer = (
   switch (action.type) {
     case 'start':
       return {
-        swiping: true,
+        isSwiping: true,
         startX: action.x,
         currentX: action.x,
+        isSwipingRight: false,
       }
     case 'swipe':
       return {
         ...state,
         currentX: action.x,
+        isSwipingRight: action.x > state.startX,
       }
     case 'stop':
-      return {
-        swiping: false,
-        startX: 0,
-        currentX: 0,
-      }
+      return initialSwiperState
     default:
       return state
   }
@@ -55,7 +55,12 @@ const SkinSwiper = ({
   const ref = useRef(null)
   const { width: windowWidth = 0 } = useWindowSize()
   const [state, dispatch] = useReducer(swipingReducer, initialSwiperState)
-  const { swiping, startX: touchStartX, currentX: currentTouchX } = state
+  const {
+    isSwiping,
+    isSwipingRight,
+    startX: touchStartX,
+    currentX: currentTouchX,
+  } = state
 
   return (
     <div
@@ -71,11 +76,18 @@ const SkinSwiper = ({
       {skins.map((skin, index) => {
         const isCurrent = index === currentSkinIndex
         const indexDifference = index - currentSkinIndex
-        const translateDistance = 5
+        const absoluteIndexDifference = Math.abs(indexDifference)
+        const maxDragDistance = 200
+
+        // Shadows
         const currentBoxShadow =
           '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)'
         const boxShadow =
           '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+
+        // Positioning of image
+        let zIndex = 1100 - absoluteIndexDifference
+        const translateDistance = 5
         const containerWidth = windowWidth * 0.7
         const baseLeft = 0
         let left = 0
@@ -87,10 +99,26 @@ const SkinSwiper = ({
         if (isPositionedRight) {
           left = baseLeft + containerWidth + indexDifference * translateDistance
         }
-        if (isCurrent && swiping) {
+        if (isCurrent && isSwiping) {
           let distance = Math.abs(touchStartX - currentTouchX)
-          if (distance > 200) distance = 200
+          if (distance > maxDragDistance) distance = maxDragDistance
           left = touchStartX - currentTouchX < 0 ? distance : -distance
+        }
+
+        // Drag image next to current one along during swipe.
+        if (isSwiping && absoluteIndexDifference === 1) {
+          let distance = Math.abs(touchStartX - currentTouchX)
+          if (distance > maxDragDistance) {
+            distance = maxDragDistance
+          }
+          if (isPositionedLeft && isSwipingRight) {
+            left = left + distance
+            zIndex = zIndex + absoluteIndexDifference + 1
+          }
+          if (isPositionedRight && !isSwipingRight) {
+            left = left - distance
+            zIndex = zIndex + absoluteIndexDifference + 1
+          }
         }
 
         return (
@@ -104,7 +132,7 @@ const SkinSwiper = ({
               cursor: pointer;
               left: ${left}px;
               transform: ${isCurrent ? 'scale(1.05)' : ''};
-              z-index: ${1100 - Math.abs(indexDifference)};
+              z-index: ${zIndex};
             `}
           >
             <img
