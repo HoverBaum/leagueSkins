@@ -15,9 +15,7 @@ const useChampions = () => {
     const skinsUrl =
       /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(
         window.location.hostname
-      ) &&
-      window.location.search.indexOf('all') === -1 &&
-      false
+      ) && window.location.search.indexOf('all') === -1
         ? '/testData/skins.json'
         : '/skins.json'
 
