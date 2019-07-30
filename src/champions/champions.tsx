@@ -23,6 +23,14 @@ const Champions = ({ match }: { match: any }) => {
   const [shouldDisplayLoader] = useLoaderState()
   const { champions, loading, error, championProgress } = useChampions()
 
+  // FIXME: this is a hackaround for routing.
+  // Should be removed once champions move to their own route.
+  if (
+    window.location.pathname !== '/' &&
+    window.location.pathname.indexOf('champion') === -1
+  )
+    return null
+
   const filterChampions = (
     champions: Champion[],
     filter: string

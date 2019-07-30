@@ -75,8 +75,7 @@ const App: React.FC = () => {
             }
           `}
         >
-          <Route path="/" exact component={Champions} />
-          <Route path="/champion" component={Champions} />
+          <Route path="/" component={Champions} />
           <Route path="/about" component={About} />
         </main>
 
