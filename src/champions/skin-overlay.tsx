@@ -7,6 +7,7 @@ import SkinSwiper from './skin-swiper'
 import { useState } from 'react'
 import useBreakpoints from '../hooks/useBreakpoints'
 import Loader from '../loader'
+import useNoScroll from '../hooks/useNoScroll'
 
 const SkinOverlay = ({
   loadingImageURL,
@@ -20,6 +21,7 @@ const SkinOverlay = ({
   const loadedSkins: SkinLoaded[] = useSkinImages(skins)
   const [skinIndex, setSkinIndex] = useState(0)
   const { isLandscape } = useBreakpoints()
+  useNoScroll()
 
   const landscapeTitle = (skin: Skin) => {
     if (skin.shortName === 'Default') return skin.name

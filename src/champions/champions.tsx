@@ -19,10 +19,8 @@ import useChampions from './useChampions'
 
 const Champions = ({ match }: { match: any }) => {
   const [startPosition, setStartPosition] = useState()
-
   const [filter, setFilter] = useState('')
   const [shouldDisplayLoader] = useLoaderState()
-
   const { champions, loading, error, championProgress } = useChampions()
 
   const filterChampions = (

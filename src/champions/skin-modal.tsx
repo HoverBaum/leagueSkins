@@ -7,6 +7,7 @@ import { useRef, useEffect, useState, Fragment } from 'react'
 import useWindowSize from '../hooks/useWindowSize'
 import ChampionSpinner from './champion-spinner'
 import useSkinImages from './useSkinImages'
+import useNoScroll from '../hooks/useNoScroll'
 
 const SkinModal = ({
   loadingImageURL,
@@ -24,6 +25,7 @@ const SkinModal = ({
   const { width = 100 } = useWindowSize()
   const ref = useRef(null)
   useOutsideClick(ref, onClose)
+  useNoScroll()
 
   const widthRation = width > 1280 ? 0.7 : 0.9
   const modalWith = width * widthRation
