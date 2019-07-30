@@ -46,7 +46,7 @@ const Champions = ({ match }: { match: any }) => {
   return (
     <React.Fragment>
       <Route
-        path={`${match.path.replace(/\/$/, '')}/champion/:championId/skins`}
+        path={'/champion/:championId/skins'}
         component={(props: any) => (
           <SkinExplorer
             {...props}
