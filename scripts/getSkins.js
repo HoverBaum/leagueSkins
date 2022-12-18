@@ -1,13 +1,13 @@
 const http = require('https')
 const fs = require('fs')
 
-const fetchJson = url =>
+const fetchJson = (url) =>
   new Promise((resolve, reject) => {
     http
-      .get(url, res => {
+      .get(url, (res) => {
         let body = ''
 
-        res.on('data', chunk => {
+        res.on('data', (chunk) => {
           body += chunk
         })
 
@@ -23,10 +23,10 @@ const fetchJson = url =>
           }
         })
       })
-      .on('error', e => {
+      .on('error', (e) => {
         reject(e)
       })
-  }).catch(e => {
+  }).catch((e) => {
     console.log('Error in fetching JSON:')
     console.log('URL was: ', url)
     console.log(e)
@@ -74,14 +74,12 @@ const start = async () => {
   let fetchedChampions = 0
   const championsWithSkins = await Promise.all(
     champions.map(
-      champion =>
+      (champion) =>
         new Promise(async (resolve, reject) => {
-          const moreChampionData = await fetchJson(
-            `https://cdn.communitydragon.org/${currentVersion}/champion/${
-              champion.key
-            }/data`
-          )
-          const skins = moreChampionData.skins.map(skin => {
+          const url = `https://cdn.communitydragon.org/${currentVersion}/champion/${champion.key}/data`
+          const moreChampionData = await fetchJson(url)
+          console.log(champion.name, url, moreChampionData)
+          const skins = moreChampionData.skins.map((skin) => {
             const number = skinIdToNumber(skin.id, champion.key)
             return {
               name: skin.name,
@@ -90,12 +88,8 @@ const start = async () => {
               isLegacy: skin.isLegacy,
               description: skin.description,
               number,
-              splashImageUrl: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${
-                champion.id
-              }_${number}.jpg`,
-              loadingImageUrl: `http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${
-                champion.id
-              }_${number}.jpg`,
+              splashImageUrl: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champion.id}_${number}.jpg`,
+              loadingImageUrl: `http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_${number}.jpg`,
               shortName: createShortName(skin.name, champion.name),
             }
           })
@@ -109,19 +103,21 @@ const start = async () => {
             key: champion.key,
             title: champion.title,
             skins,
-            squareImageUrl: `http://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${
-              champion.id
-            }.png`,
+            squareImageUrl: `http://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${champion.id}.png`,
           })
         })
     )
   )
 
   console.log('Saving skins to json.')
-  fs.writeFile('public/skins.json', JSON.stringify(championsWithSkins), err => {
-    if (err) return console.wanr(err)
-    console.log('Done.')
-  })
+  fs.writeFile(
+    'public/skins.json',
+    JSON.stringify(championsWithSkins),
+    (err) => {
+      if (err) return console.wanr(err)
+      console.log('Done.')
+    }
+  )
 }
 
 start()
